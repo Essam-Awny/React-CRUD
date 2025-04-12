@@ -22,10 +22,6 @@
     "firebase": "^11.6.0",
     "formik": "^2.4.6",
     "react": "^19.0.0",
-<<<<<<< HEAD
-    "react-bootstrap": "^2.10.9",
-=======
->>>>>>> b8c20b2fa63624482102d8543ba4a8d23014e158
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.5.0",
     "yup": "^1.6.1"
