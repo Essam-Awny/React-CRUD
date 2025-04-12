@@ -1,8 +1,9 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore} from "firebase/firestore";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 
 const firebaseConfig = {
-    apiKey: "AIzaSy....",
+    apiKey: "AIzaSyCB9HCMW4My0o4SFhG_1o3QxjvDTyfoCv4",
     authDomain: "react-crud-ff987.firebaseapp.com",
     projectId: "react-crud-ff987",
     storageBucket: "react-crud-ff987.appspot.com",
@@ -12,5 +13,5 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-
-export { db };
+const auth=getAuth(app)
+export { db,auth,createUserWithEmailAndPassword };

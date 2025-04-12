@@ -9,7 +9,6 @@ import Login from './Components/Login/Login';
 import SignUp from './Components/SignUp/SignUp';
 import UserContextProvider from './Components/Context/UserContext';
 import ProtectedRoute from './Components/ProtectedRoutes/ProtectedRoutes';
-import Login from './Components/Login';
 import Dashboard from './Pages/Dashboard';
 
 
@@ -30,7 +29,6 @@ function App() {
         <Route path="/edit" element={<Edit />} />
         <Route path="/create" element={<Create />} />
         <Route path="/view" element={<View />} />
-        <Route path="/login" element={<Login />} />
       </Routes>
     </Router>
   </UserContextProvider>
