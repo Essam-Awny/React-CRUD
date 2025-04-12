@@ -9,7 +9,11 @@ import Login from './Components/Login/Login';
 import SignUp from './Components/SignUp/SignUp';
 import UserContextProvider from './Components/Context/UserContext';
 import ProtectedRoute from './Components/ProtectedRoutes/ProtectedRoutes';
+<<<<<<< HEAD
 import Dashboard from './Pages/Dashboard/Dashboard';
+=======
+import Dashboard from './Pages/Dashboard';
+>>>>>>> b8c20b2fa63624482102d8543ba4a8d23014e158
 
 
 function App() {
@@ -21,10 +25,17 @@ function App() {
         <Route path="/edit" element={<ProtectedRoute element={<Edit />} />} />
         <Route path="/create" element={<ProtectedRoute element={<Create />} />} />
         <Route path="/view" element={<View />} />
+<<<<<<< HEAD
         <Route path="/" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="*" element={<h2>Page Not Found</h2>} />
         <Route path='/dashboard' element={<Dashboard/>}/>
+=======
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="*" element={<h2>Page Not Found</h2>} />
+        <Route path='/' element={<Dashboard/>}/>
+>>>>>>> b8c20b2fa63624482102d8543ba4a8d23014e158
         <Route path="/table" element={<Table />} />
         <Route path="/edit" element={<Edit />} />
         <Route path="/create" element={<Create />} />
