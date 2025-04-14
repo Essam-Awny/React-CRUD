@@ -10,7 +10,10 @@ import SignUp from './Components/SignUp/SignUp';
 import UserContextProvider from './Components/Context/UserContext';
 import ProtectedRoute from './Components/ProtectedRoutes/ProtectedRoutes';
 import Dashboard from './Pages/Dashboard';
+<<<<<<< HEAD
 import DefaultCode from './Components/Code';
+=======
+>>>>>>> dacd5ba51a754a744fd456a4573c3a8053538f78
 
 
 function App() {
