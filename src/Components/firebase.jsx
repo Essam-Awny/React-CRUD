@@ -3,7 +3,7 @@ import { getFirestore} from "firebase/firestore";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyCB9HCMW4My0o4SFhG_1o3QxjvDTyfoCv4",
+    apiKey: "AIzaSy....",
     authDomain: "react-crud-ff987.firebaseapp.com",
     projectId: "react-crud-ff987",
     storageBucket: "react-crud-ff987.appspot.com",

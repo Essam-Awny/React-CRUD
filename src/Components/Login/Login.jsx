@@ -50,11 +50,7 @@ export default function Login() {
       SetIsLogin(token);
 
       // Redirect to the dashboard or main page
-<<<<<<< HEAD
       navigate("/dashboard");
-=======
-      navigate("/view");
->>>>>>> b8c20b2fa63624482102d8543ba4a8d23014e158
     } catch (error) {
       console.error("Error during login:", error.message);
       SetapiError(error.message);
