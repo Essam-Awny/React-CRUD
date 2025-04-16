@@ -1,21 +1,37 @@
 import React, { useContext, useState } from "react";
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
-import * as Yup from 'yup';
+import * as Yup from "yup";
 import { UserContext } from "../Context/UserContext";
 import { auth, createUserWithEmailAndPassword } from "./../firebase";
 import "./SignUp.css";
-import img from './../../assets/login.jpg';
+import img from "./../../assets/login.jpg";
+import { Link } from "react-router-dom";
+import { db } from "./../firebase";
+import { doc, setDoc } from "firebase/firestore";
 
 export default function SignUp() {
   // Validation Schema
   let validationSchema = Yup.object({
-    name: Yup.string().required('Name is required').min(3, 'Minimum length is 3').max(30, 'Maximum length is 30'),
-    email: Yup.string().required('Email is required').email('Enter a valid email'),
-    phone: Yup.string().required('Phone is required').matches(/^01[1250][0-9]{8}$/, 'Phone is not valid'),
-    password: Yup.string().required('Password is required').matches(/^[A-Z][a-z0-9]{6,8}$/, 'Password is not valid'),
-    rePassword: Yup.string().required('Confirm password is required').oneOf([Yup.ref('password')]),
-  });
+    name: Yup.string()
+      .required("Name is required")
+      .min(5, "Minimum length is 5")
+      .max(30, "Maximum length is 30"),
+    email: Yup.string()
+      .required("Email is required")
+      .email("Enter a valid email"),
+    phone: Yup.string()
+      .required("Phone is required")
+      .matches(/^01[1250][0-9]{8}$/, "Phone should be 11 number"),
+    password: Yup.string()
+      .required("Password is required")
+      .matches(
+        /^[A-Z][a-z0-9]{6,12}$/,
+        "Password must be 6-12 characters, start with a capital letter, and contain only lowercase letters and digits"
+      ),
+    rePassword: Yup.string()
+      .required("Confirm password is required")
+      .oneOf([Yup.ref("password")],"Passwords must match"  ),});
 
   let formik = useFormik({
     initialValues: {
@@ -28,32 +44,54 @@ export default function SignUp() {
     validationSchema: validationSchema,
     onSubmit: handleRegister,
   });
+  let [userNo,setUserNo]=useState(1)
+  
 
   let navigate = useNavigate();
-  const [apiError, SetapiError] = useState('');
+  const [apiError, SetapiError] = useState("");
   let { SetIsLogin } = useContext(UserContext);
 
   async function handleRegister(formData) {
     try {
       // Use Firebase Authentication to create a new user
-      const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        formData.email,
+        formData.password
+      );
       const user = userCredential.user;
+      setUserNo(userNo++)
+      await setDoc(doc(db, "Users", `User${userNo}`), {
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        createdAt: new Date(),
+        UserId:user.uid
+      });
 
       // Once the user is created, store the token
       const token = await user.getIdToken(); // Get Firebase token
 
       // Save token in local storage and set login state
       localStorage.setItem("UserToken", token);
-      localStorage.setItem("User",user)
+      localStorage.setItem("User", JSON.stringify(user));
       SetIsLogin(token);
 
       console.log("User registered successfully:", user);
 
       // Redirect to login page
-      navigate('/login');
+      navigate("/login");
     } catch (error) {
-      SetapiError(error.message);
-      console.error("Error during registration:", error);
+      switch (error.code) {
+        case "auth/email-already-in-use":
+          SetapiError("This email is already in use.");
+          break;
+        case "auth/weak-password":
+          SetapiError("Password is too weak.");
+          break;
+        default:
+          SetapiError(error.message);
+      }
     }
   }
 
@@ -62,7 +100,7 @@ export default function SignUp() {
       <section className="vh-100 signup">
         <div className="container">
           <div className="row d-flex justify-content-center align-items-center">
-            <div className="col-lg-12 col-xl-11">
+            <div className="col-lg-12 col-xl-12">
               <div className="text-black">
                 <div className="card-body p-md-5">
                   <div className="row justify-content-center">
@@ -77,7 +115,10 @@ export default function SignUp() {
                         </div>
                       ) : null}
 
-                      <form className="mx-1 mx-md-4" onSubmit={formik.handleSubmit}>
+                      <form
+                        className="mx-1 mx-md-4"
+                        onSubmit={formik.handleSubmit}
+                      >
                         {/* Name Field */}
                         <div className="d-flex flex-row align-items-center mb-3">
                           <i className="fas fa-user fa-lg me-3 fa-fw"></i>
@@ -90,9 +131,18 @@ export default function SignUp() {
                               onChange={formik.handleChange}
                               onBlur={formik.handleBlur}
                               placeholder="Your Name"
-                              className={`form-control ${formik.touched.name && formik.errors.name ? 'is-invalid' : ''}`}
+                              className={`form-control ${
+                                formik.touched.name && formik.errors.name
+                                  ? "is-invalid"
+                                  : ""
+                              }`}
                               required
                             />
+                            {formik.touched.name && formik.errors.name ? (
+                              <div className="text-danger small mt-1">
+                                {formik.errors.name}
+                              </div>
+                            ) : null}
                           </div>
                         </div>
 
@@ -108,9 +158,18 @@ export default function SignUp() {
                               onChange={formik.handleChange}
                               onBlur={formik.handleBlur}
                               placeholder="Your Email"
-                              className={`form-control ${formik.touched.email && formik.errors.email ? 'is-invalid' : ''}`}
+                              className={`form-control ${
+                                formik.touched.email && formik.errors.email
+                                  ? "is-invalid"
+                                  : ""
+                              }`}
                               required
                             />
+                            {formik.touched.email && formik.errors.email ? (
+                              <div className="text-danger small mt-1">
+                                {formik.errors.email}
+                              </div>
+                            ) : null}
                           </div>
                         </div>
 
@@ -126,9 +185,20 @@ export default function SignUp() {
                               onChange={formik.handleChange}
                               onBlur={formik.handleBlur}
                               placeholder="Password"
-                              className={`form-control ${formik.touched.password && formik.errors.password ? 'is-invalid' : ''}`}
+                              className={`form-control ${
+                                formik.touched.password &&
+                                formik.errors.password
+                                  ? "is-invalid"
+                                  : ""
+                              }`}
                               required
                             />
+                            {formik.touched.password &&
+                            formik.errors.password ? (
+                              <div className="text-danger small mt-1">
+                                {formik.errors.password}
+                              </div>
+                            ) : null}
                           </div>
                         </div>
 
@@ -144,9 +214,19 @@ export default function SignUp() {
                               onChange={formik.handleChange}
                               onBlur={formik.handleBlur}
                               id="formRePass"
-                              className={`form-control ${formik.touched.rePassword && formik.errors.rePassword ? 'is-invalid' : ''}`}
+                              className={`form-control ${
+                                formik.touched.rePassword &&
+                                formik.errors.rePassword
+                                  ? "is-invalid"
+                                  : ""
+                              }`}
                               required
                             />
+                            {formik.touched.rePassword && formik.errors.rePassword ? (
+                              <div className="text-danger small mt-1">
+                                {formik.errors.rePassword}
+                              </div>
+                            ) : null}
                           </div>
                         </div>
 
@@ -162,31 +242,36 @@ export default function SignUp() {
                               onChange={formik.handleChange}
                               onBlur={formik.handleBlur}
                               id="formPhone"
-                              className={`form-control ${formik.touched.phone && formik.errors.phone ? 'is-invalid' : ''}`}
+                              className={`form-control ${
+                                formik.touched.phone && formik.errors.phone
+                                  ? "is-invalid"
+                                  : ""
+                              }`}
                               required
                             />
+                            {formik.touched.phone &&
+                            formik.errors.phone ? (
+                              <div className="text-danger small mt-1">
+                                {formik.errors.phone}
+                              </div>
+                            ) : null}
                           </div>
                         </div>
 
-                        {/* Terms and Conditions Checkbox */}
-                        <div className="form-check d-flex justify-content-center mb-5">
-                          <input
-                            className="form-check-input me-2"
-                            type="checkbox"
-                            value=""
-                            id="form2Example3c"
-                            required
-                          />
-                          <label className="form-check-label" htmlFor="form2Example3">
-                            I agree all statements in <a href="#!">Terms of service</a>
-                          </label>
-                        </div>
-
                         {/* Submit Button */}
-                        <div className="d-flex justify-content-center mx-4 ">
-                          <button type="submit" data-mdb-button-init data-mdb-ripple-init className="btn btn-primary btn-lg">
+                        <div className="d-flex justify-content-center mx-4 mt-5 flex-column align-items-center ">
+                          <button
+                            type="submit"
+                            data-mdb-button-init
+                            data-mdb-ripple-init
+                            className="btn btn-primary btn-lg "
+                          >
                             Register
                           </button>
+                          <p>
+                            Already have an account?{" "}
+                            <Link to={"/login"}>LogIn</Link>{" "}
+                          </p>
                         </div>
                       </form>
                     </div>

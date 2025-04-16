@@ -22,9 +22,11 @@ function App() {
         <Route path="/table" element={<Tableshow/>} />
         <Route path="/edit" element={<ProtectedRoute element={<Edit />} />} />
         <Route path="/create" element={<ProtectedRoute element={<Create />} />} />
+{/*         <Route path="/create" element={<Create />} /> */}
         <Route path="/view" element={<View />} />
         <Route path="/login" element={<Login />} />
         <Route path="/" element={<SignUp />} />
+        <Route path="/signup" element={<SignUp />} />
         <Route path="*" element={<h2>Page Not Found</h2>} />
         <Route path='/dashboard' element={<Dashboard/>}/>
         <Route path="/table" element={<Tableshow />} />
