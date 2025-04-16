@@ -1,12 +1,14 @@
 import React, { useState, useContext } from "react";
 import "./Login.css";
 import { useFormik } from "formik";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../Context/UserContext";
 import * as Yup from "yup";
-import img from './../../assets/login2.jpg';
-import { auth } from './../firebase'; // import Firebase auth module
+import img from "./../../assets/login2.jpg";
+import { auth } from "./../firebase"; // import Firebase auth module
 import { signInWithEmailAndPassword } from "firebase/auth";
+import { db } from "../firebase";
+import { collection, query, where, getDocs } from "firebase/firestore";
 
 export default function Login() {
   const validationSchema = Yup.object({
@@ -15,7 +17,10 @@ export default function Login() {
       .email("Enter a valid email"),
     password: Yup.string()
       .required("Password is required")
-      .matches(/^[A-Z][a-z0-9]{6,8}$/, "Password is not valid"),
+      .matches(
+        /^[A-Z][a-z0-9]{6,12}$/,
+        "Password must be 6-12 characters, start with a capital letter, and contain only lowercase letters and digits"
+      ),
   });
 
   const formik = useFormik({
@@ -33,6 +38,17 @@ export default function Login() {
 
   async function handleLogin(formData) {
     try {
+      // Check Firestore if user exists
+      const usersRef = collection(db, "Users");
+      const q = query(usersRef, where("email", "==", formData.email));
+      const querySnapshot = await getDocs(q);
+
+      if (querySnapshot.empty) {
+        SetapiError("No account found for this email.");
+        return;
+      }
+
+      // If user found, attempt Firebase Auth login
       const userCredential = await signInWithEmailAndPassword(
         auth,
         formData.email,
@@ -42,20 +58,13 @@ export default function Login() {
       const user = userCredential.user;
       console.log("User logged in successfully:", user);
 
-      // Get the Firebase token
       const token = await user.getIdToken();
-
-      // Store the token and set the login state
       localStorage.setItem("UserToken", token);
       SetIsLogin(token);
 
-      // Redirect to the dashboard or main page
-
       navigate("/dashboard");
-
     } catch (error) {
-      console.error("Error during login:", error.message);
-      SetapiError(error.message);
+      SetapiError("Invalid Email Or Password");
     }
   }
 
@@ -63,7 +72,7 @@ export default function Login() {
     <section className="d-flex justify-content-center align-items-center vh-100 login">
       <div className="container">
         <div className="row d-flex justify-content-center align-items-center">
-          <div className="col-md-10 col-lg-7 col-xl-6 order-2 order-lg-1">
+          <div className="col-md-10 col-lg-7 p-5 col-xl-6 order-2 order-lg-1">
             <form
               className="mx-1 mx-md-4 w-100 p-5"
               onSubmit={formik.handleSubmit}
@@ -81,7 +90,10 @@ export default function Login() {
               {/* Email Field */}
               <div className="d-flex flex-row align-items-center mb-4">
                 <i className="fas fa-envelope fa-lg me-3 fa-fw"></i>
-                <div data-mdb-input-init className="form-outline flex-fill mb-0">
+                <div
+                  data-mdb-input-init
+                  className="form-outline flex-fill mb-0"
+                >
                   <input
                     type="email"
                     id="formMail"
@@ -97,13 +109,21 @@ export default function Login() {
                     }`}
                     required
                   />
+                  {formik.touched.email && formik.errors.email ? (
+                    <div className="text-danger small mt-1">
+                      {formik.errors.email}
+                    </div>
+                  ) : null}
                 </div>
               </div>
 
               {/* Password Field */}
               <div className="d-flex flex-row align-items-center mb-4">
                 <i className="fas fa-lock fa-lg me-3 fa-fw"></i>
-                <div data-mdb-input-init className="form-outline flex-fill mb-0">
+                <div
+                  data-mdb-input-init
+                  className="form-outline flex-fill mb-0"
+                >
                   <input
                     type="password"
                     id="formPass"
@@ -119,11 +139,16 @@ export default function Login() {
                     }`}
                     required
                   />
+                  {formik.touched.password && formik.errors.password ? (
+                    <div className="text-danger small mt-1">
+                      {formik.errors.password}
+                    </div>
+                  ) : null}
                 </div>
               </div>
 
               {/* Submit Button */}
-              <div className="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
+              <div className="d-flex justify-content-center mx-4 mb-3 mt-5 mb-lg-4 flex-column align-items-center">
                 <button
                   type="submit"
                   data-mdb-button-init
@@ -132,6 +157,9 @@ export default function Login() {
                 >
                   LogIn
                 </button>
+                <p>
+                  <Link to={"/signup"}>Create New Account?</Link>
+                </p>
               </div>
             </form>
           </div>
