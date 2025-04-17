@@ -22,7 +22,6 @@ function App() {
         <Route path="/table" element={<Tableshow/>} />
         <Route path="/edit" element={<ProtectedRoute element={<Edit />} />} />
         <Route path="/create" element={<ProtectedRoute element={<Create />} />} />
-{/*         <Route path="/create" element={<Create />} /> */}
         <Route path="/view" element={<View />} />
         <Route path="/login" element={<Login />} />
         <Route path="/" element={<SignUp />} />
