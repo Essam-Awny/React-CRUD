@@ -16,10 +16,7 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^6.7.2",
-<<<<<<< HEAD
     "@fortawesome/fontawesome-svg-core": "^6.7.2",
-=======
->>>>>>> a4dd22ec02610b3b1b48fcf2e4465288d401bc8a
     "@fortawesome/free-solid-svg-icons": "^6.7.2",
     "@fortawesome/react-fontawesome": "^0.2.2",
     "@popperjs/core": "^2.11.8",

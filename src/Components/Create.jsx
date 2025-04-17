@@ -20,13 +20,13 @@ function Create() {
         city: Yup.string().required('City is required'),
         zipCode: Yup.string().matches(/^\d{5}(-\d{4})?$/, 'Invalid ZIP code').required('ZIP code is required'),
         salary: Yup.number().required('Salary is required').positive('Salary must be a positive number').integer('Salary must be an integer')
-      });
+    });
 
     // Modal state
     const [showModal, setShowModal] = useState(false);
     const [formData, setFormData] = useState(null);
     const navigate = useNavigate();
-    
+
     const initialValues = {
         firstName: '',
         lastName: '',
@@ -37,13 +37,13 @@ function Create() {
         zipCode: '',
         salary: ''
     };
-    
+
     // Form submission
     const handleSubmit = (values) => {
         setFormData(values);
         setShowModal(true);
     };
-    
+
     // Close form
     const handleClose = () => {
         if (window.confirm('Are you sure you want to close the form? All unsaved data will be lost.')) {
@@ -51,24 +51,24 @@ function Create() {
             alert('Form closed');
         }
     };
-    
+
     const handleSave = async () => {
         try {
-          // Save the form data to the 'Employees' collection
-          const docRef = await addDoc(collection(db, "Employees"), formData);
-          console.log("Document written with ID: ", docRef.id);
-      
-          setShowModal(false);
-          alert("Form submitted successfully!");
-          navigate("/dashboard");
-      
+            // Save the form data to the 'Employees' collection
+            const docRef = await addDoc(collection(db, "Employees"), formData);
+            console.log("Document written with ID: ", docRef.id);
+
+            setShowModal(false);
+            alert("Form submitted successfully!");
+            navigate("/dashboard");
+
         } catch (error) {
-          console.error("Error adding document: ", error);
-          alert("Something went wrong. Please try again.");
+            console.error("Error adding document: ", error);
+            alert("Something went wrong. Please try again.");
         }
-      };
-      
-    
+    };
+
+
     return (
         <Container className="py-4">
             <Card>
@@ -77,7 +77,7 @@ function Create() {
                     <CloseButton onClick={handleClose} aria-label="Close">
                     </CloseButton>
                 </Card.Header>
-                
+
                 <Card.Body>
                     <Formik
                         initialValues={initialValues}
@@ -89,7 +89,7 @@ function Create() {
                         {({ values, errors, touched, isValid, dirty, resetForm }) => {
                             const totalFields = Object.keys(validationSchema.fields).length;
                             let validCount = 0;
-                            
+
                             // Count valid fields (have a value and no error)
                             Object.keys(validationSchema.fields).forEach(field => {
                                 if (values[field] && (!errors[field] || !touched[field])) {
@@ -97,7 +97,7 @@ function Create() {
                                 }
                             });
                             const progress = Math.floor((validCount / totalFields) * 100);
-                            
+
                             return (
                                 <Form>
                                     {/* Progress Bar */}
@@ -106,12 +106,12 @@ function Create() {
                                             <span>Form Completion</span>
                                             <span>{progress}%</span>
                                         </div>
-                                        <ProgressBar 
-                                            now={progress} 
-                                            variant={progress < 50 ? 'danger' : progress < 80 ? 'warning' : 'success'} 
+                                        <ProgressBar
+                                            now={progress}
+                                            variant={progress < 50 ? 'danger' : progress < 80 ? 'warning' : 'success'}
                                         />
                                     </div>
-                                    
+
                                     <Row>
                                         <Col md={6}>
                                             <div className="mb-3">
@@ -128,7 +128,7 @@ function Create() {
                                                 />
                                             </div>
                                         </Col>
-                                        
+
                                         <Col md={6}>
                                             <div className="mb-3">
                                                 <label htmlFor="lastName" className="form-label">Last Name</label>
@@ -163,7 +163,7 @@ function Create() {
                                                 />
                                             </div>
                                         </Col>
-                                        
+
                                         <Col md={6}>
                                             <div className="mb-3">
                                                 <label htmlFor="phone" className="form-label">Phone Number</label>
@@ -181,7 +181,7 @@ function Create() {
                                             </div>
                                         </Col>
                                     </Row>
-                                    
+
                                     <div className="mb-3">
                                         <label htmlFor="address" className="form-label">Address</label>
                                         <Field
@@ -196,7 +196,7 @@ function Create() {
                                             className="invalid-feedback"
                                         />
                                     </div>
-                                    
+
                                     <Row>
                                         <Col md={8}>
                                             <div className="mb-3">
@@ -213,7 +213,7 @@ function Create() {
                                                 />
                                             </div>
                                         </Col>
-                                        
+
                                         <Col md={4}>
                                             <div className="mb-3">
                                                 <label htmlFor="zipCode" className="form-label">ZIP Code</label>
@@ -235,33 +235,33 @@ function Create() {
                                     <Row>
                                         <Col md={6}>
                                             <div className="mb-3">
-                                            <label htmlFor="salary" className="form-label">Salary</label>
-                                            <Field
-                                                name="salary"
-                                                type="number"
-                                                className={`form-control ${errors.salary && touched.salary ? 'is-invalid' : ''}`}
-                                                placeholder="0"
-                                            />
-                                            <ErrorMessage
-                                                name="salary"
-                                                component="div"
-                                                className="invalid-feedback"
-                                            />
+                                                <label htmlFor="salary" className="form-label">Salary</label>
+                                                <Field
+                                                    name="salary"
+                                                    type="number"
+                                                    className={`form-control ${errors.salary && touched.salary ? 'is-invalid' : ''}`}
+                                                    placeholder="0"
+                                                />
+                                                <ErrorMessage
+                                                    name="salary"
+                                                    component="div"
+                                                    className="invalid-feedback"
+                                                />
                                             </div>
                                         </Col>
                                     </Row>
-                                    
+
                                     <div className="d-flex justify-content-end gap-2 mt-4">
-                                        <Button 
-                                            variant="secondary" 
-                                            onClick={() => resetForm()} 
+                                        <Button
+                                            variant="secondary"
+                                            onClick={() => resetForm()}
                                             disabled={!dirty}
                                         >
                                             <FontAwesomeIcon icon={faUndo} /> Reset
                                         </Button>
-                                        <Button 
-                                            variant="primary" 
-                                            type="submit" 
+                                        <Button
+                                            variant="primary"
+                                            type="submit"
                                             disabled={!isValid || !dirty}
                                         >
                                             <FontAwesomeIcon icon={faSave} /> Save
@@ -273,7 +273,7 @@ function Create() {
                     </Formik>
                 </Card.Body>
             </Card>
-            
+
             {/* Confirmation Modal */}
             <Modal show={showModal} onHide={() => setShowModal(false)}>
                 <Modal.Header closeButton>

@@ -9,7 +9,7 @@ import Login from './Components/Login/Login';
 import SignUp from './Components/SignUp/SignUp';
 import UserContextProvider from './Components/Context/UserContext';
 import ProtectedRoute from './Components/ProtectedRoutes/ProtectedRoutes';
-import Dashboard from './Pages/Dashboard';
+import Dashboard from './Pages/Dashboard/Dashboard';
 import DefaultCode from './Components/Code';
 
 
