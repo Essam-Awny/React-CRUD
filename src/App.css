@@ -2,3 +2,15 @@ body{
   background-color: white;
   color: black;
 }
+
+
+/* -----Body Dark Mode-- */
+body.dark-mode {
+  background-color: #121212 !important;
+  color: white !important;
+}
+
+body.dark-mode button {
+  background-color: #333;
+  color: white;
+}
