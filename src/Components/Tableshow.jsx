@@ -1,13 +1,22 @@
 import { useEffect, useState } from "react";
 import { db } from "./firebase";
+<<<<<<< HEAD
 import { collection, getDocs, doc, deleteDoc } from "firebase/firestore";  // Add missing imports
+=======
+import { collection, getDocs } from "firebase/firestore";
+>>>>>>> c09913434306053e22ab291c18f9995041ea386f
 import { Link } from "react-router-dom";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { Table } from "react-bootstrap";
+<<<<<<< HEAD
 
+=======
+import View from "./View";
+>>>>>>> c09913434306053e22ab291c18f9995041ea386f
 function Tableshow(props) {
   const [users, setUsers] = useState([]);
+  const [selectedEmployee, setSelectedEmployee] = useState(null);
 
   // Fetch employees from Firestore
   useEffect(() => {
@@ -15,10 +24,10 @@ function Tableshow(props) {
       const querySnapshot = await getDocs(collection(db, "Employees"));
       const data = querySnapshot.docs.map((doc) => ({
         id: doc.id,
-        ...doc.data()
+        ...doc.data(),
       }));
 
-      setUsers(data); 
+      setUsers(data);
     };
 
     fetchEmployees();
@@ -39,13 +48,18 @@ function Tableshow(props) {
 
   // Render data in table rows
   const showData = users.map((item, index) => (
-    <tr key={item.id}>
+    <tr
+      key={item.id}
+      onClick={() => setSelectedEmployee(item)} // Click the row to select employee
+      style={{ cursor: "pointer" }} // Add a pointer cursor to indicate that the row is clickable
+    >
       <td>{index + 1}</td>
       <td>{item.firstName}</td>
       <td>{item.lastName}</td>
       <td>{item.Email}</td>
-      <td>{item.Date}</td>
       <td>{item.salary}</td>
+      <td>{item.Date}</td>
+
       <td>
         <div className="d-flex align-items-center gap-2">
           <Link to={`${item.id}`}>
@@ -64,6 +78,7 @@ function Tableshow(props) {
   ));
 
   return (
+<<<<<<< HEAD
     <Table striped bordered hover>
       <thead>
         <tr>
@@ -80,6 +95,30 @@ function Tableshow(props) {
         {showData}
       </tbody>
     </Table>
+=======
+    <>
+      <Table striped bordered hover>
+        <thead>
+          <tr>
+            <td>ID</td>
+            <td>First Name</td>
+            <td>Last Name</td>
+            <td>Email</td>
+            <td>Salary</td>
+            <td>Date</td>
+            <td>Actions</td>
+          </tr>
+        </thead>
+        <tbody>{showData}</tbody>
+      </Table>
+      {selectedEmployee && (
+        <View
+          employee={selectedEmployee}
+          onClose={() => setSelectedEmployee(null)} // Close modal
+        />
+      )}
+    </>
+>>>>>>> c09913434306053e22ab291c18f9995041ea386f
   );
 }
 
