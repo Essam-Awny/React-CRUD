@@ -6,9 +6,7 @@ import { UserContext } from "../Context/UserContext";
 import * as Yup from "yup";
 import img from "./../../assets/login2.jpg";
 import { auth } from "./../firebase"; // import Firebase auth module
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { db } from "../firebase";
-import { collection, query, where, getDocs } from "firebase/firestore";
+import { signInWithEmailAndPassword } from "firebase/auth"; // import the Firebase signIn function
 
 export default function Login() {
   const validationSchema = Yup.object({
@@ -38,17 +36,6 @@ export default function Login() {
 
   async function handleLogin(formData) {
     try {
-      // Check Firestore if user exists
-      const usersRef = collection(db, "Users");
-      const q = query(usersRef, where("email", "==", formData.email));
-      const querySnapshot = await getDocs(q);
-
-      if (querySnapshot.empty) {
-        SetapiError("No account found for this email.");
-        return;
-      }
-
-      // If user found, attempt Firebase Auth login
       const userCredential = await signInWithEmailAndPassword(
         auth,
         formData.email,
@@ -56,15 +43,24 @@ export default function Login() {
       );
 
       const user = userCredential.user;
+
       console.log("User logged in successfully:", user);
 
       const token = await user.getIdToken();
+      
       localStorage.setItem("UserToken", token);
+
       SetIsLogin(token);
 
       navigate("/dashboard");
     } catch (error) {
-      SetapiError("Invalid Email Or Password");
+      if (error.code === "auth/user-not-found") {
+        SetapiError("No account found for this email.");
+      } else if (error.code === "auth/wrong-password") {
+        SetapiError("Incorrect password. Please try again.");
+      } else {
+        SetapiError("Something went wrong. Please try again later.");
+      }
     }
   }
 
@@ -90,10 +86,7 @@ export default function Login() {
               {/* Email Field */}
               <div className="d-flex flex-row align-items-center mb-4">
                 <i className="fas fa-envelope fa-lg me-3 fa-fw"></i>
-                <div
-                  data-mdb-input-init
-                  className="form-outline flex-fill mb-0"
-                >
+                <div data-mdb-input-init className="form-outline flex-fill mb-0">
                   <input
                     type="email"
                     id="formMail"
@@ -120,10 +113,7 @@ export default function Login() {
               {/* Password Field */}
               <div className="d-flex flex-row align-items-center mb-4">
                 <i className="fas fa-lock fa-lg me-3 fa-fw"></i>
-                <div
-                  data-mdb-input-init
-                  className="form-outline flex-fill mb-0"
-                >
+                <div data-mdb-input-init className="form-outline flex-fill mb-0">
                   <input
                     type="password"
                     id="formPass"

@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
 import { db } from "./firebase";
-import { collection, getDocs } from "firebase/firestore";      
+import { collection, getDocs, doc, deleteDoc } from "firebase/firestore";  // Add missing imports
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Table } from "react-bootstrap";
+
 function Tableshow(props) {
   const [users, setUsers] = useState([]);
 
+  // Fetch employees from Firestore
   useEffect(() => {
     const fetchEmployees = async () => {
       const querySnapshot = await getDocs(collection(db, "Employees"));
@@ -22,6 +24,20 @@ function Tableshow(props) {
     fetchEmployees();
   }, []);
 
+  // Handle delete action
+  const handleDelete = async (id) => {
+    try {
+      // Deleting the document from Firestore
+      await deleteDoc(doc(db, "Employees", id));
+
+      // Remove the deleted user from the state to update UI
+      setUsers((prevUsers) => prevUsers.filter((user) => user.id !== id));
+    } catch (error) {
+      console.error("Error deleting user:", error);
+    }
+  };
+
+  // Render data in table rows
   const showData = users.map((item, index) => (
     <tr key={item.id}>
       <td>{index + 1}</td>
@@ -36,7 +52,7 @@ function Tableshow(props) {
             <FontAwesomeIcon fontSize={"19px"} icon={faPenToSquare} />
           </Link>
           <FontAwesomeIcon
-            onClick={() => props.delete(item.id)}
+            onClick={() => handleDelete(item.id)}
             fontSize={"19px"}
             color="red"
             cursor={"pointer"}
@@ -63,7 +79,7 @@ function Tableshow(props) {
       <tbody>
         {showData}
       </tbody>
-      </Table>
+    </Table>
   );
 }
 
