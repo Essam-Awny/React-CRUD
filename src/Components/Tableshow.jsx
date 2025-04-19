@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { db } from "./firebase";
+import { doc, deleteDoc } from "firebase/firestore";
 import { collection, getDocs } from "firebase/firestore";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
