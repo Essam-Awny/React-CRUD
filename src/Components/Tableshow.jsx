@@ -1,19 +1,11 @@
 import { useEffect, useState } from "react";
 import { db } from "./firebase";
-<<<<<<< HEAD
-import { collection, getDocs, doc, deleteDoc } from "firebase/firestore";  // Add missing imports
-=======
 import { collection, getDocs } from "firebase/firestore";
->>>>>>> c09913434306053e22ab291c18f9995041ea386f
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { Table } from "react-bootstrap";
-<<<<<<< HEAD
-
-=======
 import View from "./View";
->>>>>>> c09913434306053e22ab291c18f9995041ea386f
 function Tableshow(props) {
   const [users, setUsers] = useState([]);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
@@ -78,24 +70,6 @@ function Tableshow(props) {
   ));
 
   return (
-<<<<<<< HEAD
-    <Table striped bordered hover>
-      <thead>
-        <tr>
-          <td>ID</td>
-          <td>First Name</td>
-          <td>Last Name</td>
-          <td>Email</td>
-          <td>Salary</td>
-          <td>Date</td>
-          <td>Actions</td>
-        </tr>
-      </thead>
-      <tbody>
-        {showData}
-      </tbody>
-    </Table>
-=======
     <>
       <Table striped bordered hover>
         <thead>
@@ -118,7 +92,6 @@ function Tableshow(props) {
         />
       )}
     </>
->>>>>>> c09913434306053e22ab291c18f9995041ea386f
   );
 }
 
