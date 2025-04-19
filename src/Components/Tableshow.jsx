@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { db } from "./firebase";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, deleteDoc, doc} from "firebase/firestore";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { Table } from "react-bootstrap";
 import View from "./View";
-function Tableshow(props) {
+function Tableshow() {
   const [users, setUsers] = useState([]);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
 
@@ -48,7 +48,7 @@ function Tableshow(props) {
       <td>{index + 1}</td>
       <td>{item.firstName}</td>
       <td>{item.lastName}</td>
-      <td>{item.Email}</td>
+      <td>{item.email}</td>
       <td>{item.salary}</td>
       <td>{item.Date}</td>
 

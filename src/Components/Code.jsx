@@ -29,7 +29,7 @@ function DefaultCode() {
             await addDoc(collection(db, "Employees"), {
                 firstName: "Basel",
                 lastName: "Elnoury",
-                Email: " Basel@example.com",
+                email: " Basel@example.com",
                 Date: "2025-04-14",
                 salary: "10000"
             });
@@ -56,7 +56,7 @@ function DefaultCode() {
             <ul>
                 {employees.map(employee => ( 
                     <li key={employee.id}>
-                        {employee.firstName} - {employee.lastName} - {employee.Email} - {employee.Date} - {employee.salary}
+                        {employee.firstName} - {employee.lastName} - {employee.email} - {employee.Date} - {employee.salary}
                     </li>
                 ))}
             </ul>

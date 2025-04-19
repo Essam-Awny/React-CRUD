@@ -15,7 +15,7 @@ function Create() {
         firstName: Yup.string().required('First name is required'),
         lastName: Yup.string().required('Last name is required'),
         email: Yup.string().email('Invalid email format').required('Email is required'),
-        phone: Yup.string().matches(/^\d{10}$/, 'Phone number must be 10 digits').required('Phone number is required'),
+        phone: Yup.string().matches(/^\d{11}$/, 'Phone number must be 11 digits').required('Phone number is required'),
         address: Yup.string().required('Address is required'),
         city: Yup.string().required('City is required'),
         zipCode: Yup.string().matches(/^\d{5}(-\d{4})?$/, 'Invalid ZIP code').required('ZIP code is required'),
@@ -274,8 +274,12 @@ function Create() {
                 </Card.Body>
             </Card>
 
-            {/* Confirmation Modal */}
-            <Modal show={showModal} onHide={() => setShowModal(false)}>
+            <Modal
+                show={showModal}
+                onHide={() => setShowModal(false)}
+                centered
+                dialogClassName="create-bootstrap-modal"
+            >
                 <Modal.Header closeButton>
                     <Modal.Title>Confirm Submission</Modal.Title>
                 </Modal.Header>
@@ -304,7 +308,8 @@ function Create() {
                     </Button>
                 </Modal.Footer>
             </Modal>
-        </Container>
+
+        </Container>         
     );
 }
 

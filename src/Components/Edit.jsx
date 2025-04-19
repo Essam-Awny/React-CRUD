@@ -10,7 +10,7 @@ function Edit() {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
-    Email: "",
+    email: "",
     salary: "",
     Date: "",
   });
@@ -84,7 +84,7 @@ function Edit() {
           <Form.Control
             type="email"
             name="Email"
-            value={formData.Email}
+            value={formData.email}
             onChange={handleChange}
             required
           />

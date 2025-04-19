@@ -15,7 +15,7 @@ const View = ({ employee, onClose }) => {
               <strong>Name:</strong> {employee.firstName} {employee.lastName}
             </p>
             <p>
-              <strong>Email:</strong> {employee.Email}
+              <strong>Email:</strong> {employee.email}
             </p>
             <p>
               <strong>Phone:</strong> {employee.phone || "N/A"}
