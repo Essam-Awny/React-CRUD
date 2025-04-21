@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { db } from "./firebase";
-import { collection, getDocs, deleteDoc, doc} from "firebase/firestore";
+import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons";
@@ -58,7 +58,10 @@ function Tableshow() {
             <FontAwesomeIcon fontSize={"19px"} icon={faPenToSquare} />
           </Link>
           <FontAwesomeIcon
-            onClick={() => handleDelete(item.id)}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleDelete(item.id);
+            }}
             fontSize={"19px"}
             color="red"
             cursor={"pointer"}
