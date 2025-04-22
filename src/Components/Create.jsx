@@ -58,7 +58,6 @@ function Create() {
     const handleClose = () => {
         if (window.confirm('Are you sure you want to close the form? All unsaved data will be lost.')) {
             navigate("/dashboard");
-            alert('Form closed');
         }
     };
 

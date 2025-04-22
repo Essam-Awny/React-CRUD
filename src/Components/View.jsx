@@ -1,16 +1,19 @@
+
 import React from "react";
-import "./View.css";
+import { Modal, Button, Alert } from "react-bootstrap";
 
-const View = ({ employee, onClose }) => {
-  if (!employee) return null; // If no employee is passed, don't render anything.
-
+const View = ({ employee, show, onClose }) => {
+  // Use the "show" prop to control modal visibility (Bootstrap Modal pattern)
   return (
-    <div>
-      <h1>Employee Details</h1>
-      <div className="modal-backdrop" onClick={onClose}>
-        <div className="modal" onClick={(e) => e.stopPropagation()}>
-          <h2>Employee Details</h2>
-          <div className="modal-content">
+    <Modal show={show} onHide={onClose} centered>
+      <Modal.Header closeButton>
+        <Modal.Title>Employee Details</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        {!employee ? (
+          <Alert variant="warning">No employee data available.</Alert>
+        ) : (
+          <>
             <p>
               <strong>Name:</strong> {employee.firstName} {employee.lastName}
             </p>
@@ -32,11 +35,15 @@ const View = ({ employee, onClose }) => {
             <p>
               <strong>Salary:</strong> ${employee.salary}
             </p>
-          </div>
-          <button onClick={onClose}>Close</button>
-        </div>
-      </div>
-    </div>
+          </>
+        )}
+      </Modal.Body>
+      <Modal.Footer>
+        <Button variant="secondary" onClick={onClose}>
+          Close
+        </Button>
+      </Modal.Footer>
+    </Modal>
   );
 };
 

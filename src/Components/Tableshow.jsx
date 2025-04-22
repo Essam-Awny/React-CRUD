@@ -91,6 +91,7 @@ function Tableshow() {
       {selectedEmployee && (
         <View
           employee={selectedEmployee}
+          show={!!selectedEmployee} // Show modal if an employee is selected
           onClose={() => setSelectedEmployee(null)} // Close modal
         />
       )}
