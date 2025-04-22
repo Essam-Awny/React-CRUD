@@ -50,7 +50,7 @@ function Tableshow() {
       <td>{item.lastName}</td>
       <td>{item.email}</td>
       <td>{item.salary}</td>
-      <td>{item.Date}</td>
+      <td>{item.date}</td>
 
       <td>
         <div className="d-flex align-items-center gap-2">

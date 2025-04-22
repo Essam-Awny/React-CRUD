@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Form, Field, Formik, ErrorMessage } from 'formik';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -8,6 +9,13 @@ import { Modal, ProgressBar, Container, Row, Col, Card, Button, Alert, CloseButt
 import { collection, addDoc } from "firebase/firestore";
 import { db } from "./firebase";
 
+// Helper for today's date in yyyy-mm-dd format
+const getToday = () => {
+  const now = new Date();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  return `${now.getFullYear()}-${month}-${day}`;
+};
 
 function Create() {
 
@@ -19,7 +27,8 @@ function Create() {
         address: Yup.string().required('Address is required'),
         city: Yup.string().required('City is required'),
         zipCode: Yup.string().matches(/^\d{5}(-\d{4})?$/, 'Invalid ZIP code').required('ZIP code is required'),
-        salary: Yup.number().required('Salary is required').positive('Salary must be a positive number').integer('Salary must be an integer')
+        salary: Yup.number().required('Salary is required').positive('Salary must be a positive number').integer('Salary must be an integer'),
+        date: Yup.string().required('Date is required')
     });
 
     // Modal state
@@ -35,7 +44,8 @@ function Create() {
         address: '',
         city: '',
         zipCode: '',
-        salary: ''
+        salary: '',
+        date: getToday()
     };
 
     // Form submission
@@ -249,6 +259,22 @@ function Create() {
                                                 />
                                             </div>
                                         </Col>
+                                        <Col md={6}>
+                                            <div className="mb-3">
+                                                <label htmlFor='date' className='form-label'>Date</label>
+                                                <Field
+                                                    name="date"
+                                                    type="date"
+                                                    className={`form-control ${errors.date && touched.date ? 'is-invalid' : ''}`}
+                                                    max={getToday()}
+                                                />
+                                                <ErrorMessage
+                                                    name="date"
+                                                    component="div"
+                                                    className="invalid-feedback"
+                                                />
+                                            </div>
+                                        </Col>
                                     </Row>
 
                                     <div className="d-flex justify-content-end gap-2 mt-4">
@@ -296,6 +322,7 @@ function Create() {
                             <p><strong>City:</strong> {formData.city}</p>
                             <p><strong>ZIP Code:</strong> {formData.zipCode}</p>
                             <p><strong>Salary:</strong> {formData.salary}</p>
+                            <p><strong>Date:</strong> {formData.date}</p>
                         </>
                     )}
                 </Modal.Body>
