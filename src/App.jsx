@@ -1,7 +1,11 @@
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import Header from "./Components/Header/Header";
+<<<<<<< HEAD
 import Tableshow from "./Components/Tableshow";
+=======
+import Tableshow from "./Components/Tableshow/Tableshow";
+>>>>>>> f817fce (....)
 import Edit from "./Components/Edit";
 import Create from "./Components/Create";
 import View from "./Components/View";

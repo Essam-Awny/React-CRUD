@@ -2,7 +2,11 @@ import React, { useEffect } from 'react';
 import Header from '../../Components/Header/Header';
 import style from './Dashboard.module.css';
 import { Container } from 'react-bootstrap';
+<<<<<<< HEAD
 import Tableshow from './../../Components/Tableshow';
+=======
+import Tableshow from '../../Components/Tableshow/Tableshow';
+>>>>>>> f817fce (....)
 
 function Dashboard() {
     useEffect(() => {
